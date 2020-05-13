@@ -29,8 +29,8 @@ const options = {
                 protocol: 'EDFS'
             }
         ]
-    }
-
+    },
+    dlDomain: 'localDomain'
 };
 
 const resolverInstance = DIDResolver.factory(options);

@@ -1,48 +1,38 @@
-// Throwaway test
-require('../../../psknode/bundles/testsRuntime');
-require("../../../psknode/bundles/pskruntime");
-require("../../../psknode/bundles/pskWebServer");
-require("../../../psknode/bundles/edfsBar");
+'use strict';
 
-const DIDResolver = require('psk-did-resolver');
+require("../../../psknode/bundles/testsRuntime");
+const SecretDID = require('../lib/DID/SecretDID');
+const ZKDID = require('../lib/DID/ZKDID');
 
-const secretDID = new DIDResolver.DID.SecretDID({
-    dlDomain: 'local',
-    favouriteEndpoint: 'http://localhost:8080'
-});
+const dc = require("double-check");
+const assert = dc.assert;
 
-console.log('========== Initial SecretDID');
-console.log(secretDID.toUrl());
-console.log(secretDID.getKey());
-console.log(secretDID.getAnchorAlias());
-console.log(secretDID.getDLDomain());
-console.log(secretDID.getFavouriteEndpoint());
 
-const existingSecretDID = new DIDResolver.DID.SecretDID(secretDID.toUrl(false));
-console.log('========== Restored SecretDID');
-console.log(existingSecretDID.toUrl());
-console.log(existingSecretDID.getKey());
-console.log(existingSecretDID.getAnchorAlias());
-console.log(existingSecretDID.getDLDomain());
-console.log(existingSecretDID.getFavouriteEndpoint());
+assert.callback('SecretDID Test', (done) => {
+    const did = new SecretDID({
+        dlDomain: 'local',
+        favouriteEndpoint: 'http://localhost:8080'
+    });
 
-const zkdid = existingSecretDID.getZKDID();
-console.log('========== First ZKDID');
-console.log(zkdid.toUrl());
-console.log(zkdid.getAnchorAlias());
-console.log(zkdid.getDLDomain());
-console.log(zkdid.getFavouriteEndpoint());
+    const didUrl = did.toUrl();
+    assert.true(typeof didUrl === 'string', 'DID url is string');
+    assert.true(didUrl.length > 0, 'DID url is not empty');
+    assert.true(didUrl.startsWith('did:sa:local'), 'DID url has the correct prefix');
+    assert.true(didUrl.endsWith('#http://localhost:8080'), 'DID url has favourite endpoint');
 
-const zkdid2 = existingSecretDID.getZKDID();
-console.log('========== Second ZKDID');
-console.log(zkdid2.toUrl());
-console.log(zkdid2.getAnchorAlias());
-console.log(zkdid2.getDLDomain());
-console.log(zkdid2.getFavouriteEndpoint());
+    assert.true(did.getDLDomain() === 'local', 'DID has the correct DLDomain');
+    assert.true(did.getFavouriteEndpoint() === 'http://localhost:8080', 'DID has the favourite endpoint');
+    assert.true(did.getKey() instanceof Buffer, 'DID has generated a key');
+    assert.true(did.getKey().length === did.KEY_LENGTH, 'DID key has the correct length');
+    assert.true(did.getAnchorAlias().length > 0, 'DID has an anchor alias');
 
-const restoredZkdid = new DIDResolver.DID.ZKDID(zkdid2.toUrl() + '#http://localhost');
-console.log('========== Restored ZKDID');
-console.log(restoredZkdid.toUrl());
-console.log(restoredZkdid.getAnchorAlias());
-console.log(restoredZkdid.getDLDomain());
-console.log(restoredZkdid.getFavouriteEndpoint());
+    assert.true(did.getZKDID() instanceof ZKDID, 'DID returns a ZKDID');
+
+
+    const didFromUrl = new SecretDID(didUrl);
+    assert.true(didFromUrl.getDLDomain() === did.getDLDomain(), 'Restored DID has correct DLDomain');
+    assert.true(didFromUrl.getFavouriteEndpoint() === did.getFavouriteEndpoint(), 'Restored DID has correct favourite endpoint');
+    assert.true(didFromUrl.getKey().toString('hex') === did.getKey().toString('hex'), 'Restored DID has correct key');
+    assert.true(didFromUrl.getAnchorAlias() === did.getAnchorAlias(), 'Restored DID has correct anchor alias');
+    done();
+})

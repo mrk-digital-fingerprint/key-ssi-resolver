@@ -2,6 +2,9 @@
 require('../../../psknode/bundles/testsRuntime');
 require('../../../psknode/bundles/edfsBar');
 
+const dc = require("double-check");
+const assert = dc.assert;
+
 const constants = require('../lib/constants');
 const DIDResolver = require('../lib/DIDResolver');
 const BootstrapingService = require('../lib/BootstrapingService').Service;
@@ -40,6 +43,15 @@ const didResolver = new DIDResolver({
     dlDomain: 'local'
 });
 
-didResolver.createDSU(DSU_TYPES.Bar, (err, did) => {
-    console.log(err, did);
-});
+assert.callback('Create Bar Test', (done) => {
+    didResolver.createDSU(DSU_TYPES.Bar, (err, dsu) => {
+
+        assert.true(typeof err === 'undefined', 'No error while creating the DSU');
+        assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
+
+        dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
+            assert.true(typeof err === 'undefined', 'DSU is writable');
+            done();
+        })
+    });
+})

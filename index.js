@@ -4,9 +4,6 @@ const DIDResolver = require('./lib/DIDResolver');
 const BootstrapingService = require('./lib/BootstrapingService').Service;
 const constants = require('./lib/constants');
 
-// TODO: append this to the global object $$
-let didResolver;
-
 /**
  * Create a new DIDResolver instance
  * @param {object} options
@@ -29,6 +26,7 @@ function factory(options) {
 /**
  * Create a new DIDResolver instance and append it to
  * global object $$
+ *
  * @param {object} options
  * @param {object} options.endpointsConfiguration
  * @param {Array<object>} options.endpointsConfiguration.brick
@@ -36,15 +34,12 @@ function factory(options) {
  * @param {string} options.dlDomain
  */
 function initialize(options) {
-    didResolver = factory(options);
+    $$.didResolver = factory(options);
+    $$.dsuFactory = didResolver.getDSUFactory();
+    $$.bootstrapingService = didResolver.getBootstrapingService();
 }
 
 module.exports = {
-    factory,
     initialize,
-    constants,
-    DID: {
-        SecretDID: require('./lib/DID/SecretDID'),
-        ZKDID: require('./lib/DID/ZKDID')
-    }
+    constants
 };

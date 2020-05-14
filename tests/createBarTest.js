@@ -1,10 +1,10 @@
 // Throwaway test
 require('../../../psknode/bundles/testsRuntime');
-require("../../../psknode/bundles/pskruntime");
-require("../../../psknode/bundles/pskWebServer");
-require("../../../psknode/bundles/edfsBar");
+require('../../../psknode/bundles/edfsBar');
 
-const DIDResolver = require('psk-did-resolver');
+const constants = require('../lib/constants');
+const DIDResolver = require('../lib/DIDResolver');
+const BootstrapingService = require('../lib/BootstrapingService').Service;
 
 const options = {
     endpointsConfiguration: {
@@ -33,9 +33,13 @@ const options = {
     dlDomain: 'localDomain'
 };
 
-const resolverInstance = DIDResolver.factory(options);
-const DSU_TYPES = DIDResolver.constants.DSU_TYPES;
+const DSU_TYPES = constants.BUILTIN_DSU_TYPES;
+const bootstrapingService = new BootstrapingService(options);
+const didResolver = new DIDResolver({
+    bootstrapingService,
+    dlDomain: 'local'
+});
 
-resolverInstance.createDID(DSU_TYPES.Bar, (err, did) => {
+didResolver.createDSU(DSU_TYPES.Bar, (err, did) => {
     console.log(err, did);
 });

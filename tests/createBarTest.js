@@ -13,22 +13,29 @@ const options = {
     endpointsConfiguration: {
         brickEndpoints: [
             {
-                endpoint: 'http://localhost:8080',
+                endpoint: 'http://localhost:8081',
                 protocol: 'EDFS',
-                isFavourite: true
             },
             {
-                endpoint: 'http://localhost:8000',
+                endpoint: 'http://localhost:8002',
+                protocol: 'EDFS'
+            },
+            {
+                endpoint: 'http://localhost:8080',
                 protocol: 'EDFS'
             }
         ],
         aliasEndpoints: [
             {
-                endpoint: 'http://localhost:8080',
+                endpoint: 'http://localhost:8081',
                 protocol: 'EDFS'
             },
             {
                 endpoint: 'http://localhost:8000',
+                protocol: 'EDFS'
+            },
+            {
+                endpoint: 'http://localhost:8080',
                 protocol: 'EDFS'
             }
         ]
@@ -37,21 +44,28 @@ const options = {
 };
 
 const DSU_TYPES = constants.BUILTIN_DSU_TYPES;
-const bootstrapingService = new BootstrapingService(options);
+const bootstrapingService = new BootstrapingService(options.endpointsConfiguration);
 const didResolver = new DIDResolver({
     bootstrapingService,
     dlDomain: 'local'
 });
 
 assert.callback('Create Bar Test', (done) => {
-    didResolver.createDSU(DSU_TYPES.Bar, (err, dsu) => {
+    didResolver.createDSU(DSU_TYPES.Bar, {
+        favouriteEndpoint: 'http://localhost:8080'
+    }, (err, dsu) => {
 
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
 
         dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
             assert.true(typeof err === 'undefined', 'DSU is writable');
-            done();
+
+            dsu.readFile('my-file.txt', (err, data) => {
+                assert.true(typeof err === 'undefined', 'DSU is readable');
+                assert.true(data.toString() === 'Lorem Ipsum', 'File was read correctly');
+                done();
+            })
         })
     });
 })

@@ -17,7 +17,7 @@ assert.callback('SecretDID Test', (done) => {
     const didUrl = did.toUrl();
     assert.true(typeof didUrl === 'string', 'DID url is string');
     assert.true(didUrl.length > 0, 'DID url is not empty');
-    assert.true(didUrl.startsWith('did:sa:local'), 'DID url has the correct prefix');
+    assert.true(didUrl.startsWith('kdid:sa:local'), 'DID url has the correct prefix');
     assert.true(didUrl.endsWith('#http://localhost:8080'), 'DID url has favourite endpoint');
 
     assert.true(did.getDLDomain() === 'local', 'DID has the correct DLDomain');

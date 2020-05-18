@@ -1,11 +1,11 @@
 'use strict';
 
-const DIDResolver = require('./lib/DIDResolver');
+const KeyDIDResolver = require('./lib/KeyDIDResolver');
 const BootstrapingService = require('./lib/BootstrapingService').Service;
 const constants = require('./lib/constants');
 
 /**
- * Create a new DIDResolver instance
+ * Create a new KeyDIDResolver instance
  * @param {object} options
  * @param {object} options.endpointsConfiguration
  * @param {Array<object>} options.endpointsConfiguration.brickEndpoints
@@ -15,16 +15,16 @@ function factory(options) {
     options = options || {};
     const bootstrapingService = new BootstrapingService(options.endpointsConfiguration);
 
-    const didResolver = new DIDResolver({
+    const keyDidResolver = new KeyDIDResolver({
         bootstrapingService,
         dlDomain: options.dlDomain
     });
 
-    return didResolver;
+    return keyDidResolver;
 }
 
 /**
- * Create a new DIDResolver instance and append it to
+ * Create a new KeyDIDResolver instance and append it to
  * global object $$
  *
  * @param {object} options
@@ -34,9 +34,9 @@ function factory(options) {
  * @param {string} options.dlDomain
  */
 function initialize(options) {
-    $$.didResolver = factory(options);
-    $$.dsuFactory = didResolver.getDSUFactory();
-    $$.bootstrapingService = didResolver.getBootstrapingService();
+    $$.keyDidResolver = factory(options);
+    $$.dsuFactory = keyDidResolver.getDSUFactory();
+    $$.bootstrapingService = keyDidResolver.getBootstrapingService();
 }
 
 module.exports = {

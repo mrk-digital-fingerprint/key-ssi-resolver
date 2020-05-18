@@ -14,6 +14,7 @@ const didFactory = new DIDFactory();
 assert.callback('ZKDID Test', (done) => {
     const did = didFactory.create(DID_TYPES.Secret, {
         dlDomain: 'local',
+        version: '1',
         favouriteEndpoint: 'http://localhost:8080'
     });
 
@@ -31,5 +32,8 @@ assert.callback('ZKDID Test', (done) => {
     assert.true(restoredZKDID.getDLDomain() === zkdid.getDLDomain(), 'restored did has correct dldomain');
     assert.true(restoredZKDID.getFavouriteEndpoint() === zkdid.getFavouriteEndpoint(), 'restored did has correct favourite domain');
     assert.true(restoredZKDID.getSignature() === zkdid.getSignature(), 'restored did has correct signature');
+    assert.true(restoredZKDID.getHashAlgorithm() === 'pskhash', 'DID has the correct hash algorithm');
+    assert.true(restoredZKDID.getEncryptionAlgorithm() === 'aes-256-gcm', 'DID has the correct encryption algorithm');
+    assert.true(restoredZKDID.getSignatureAlgorithm() === 'pskhash', 'DID has the correct signature algorithm');
     done();
 });

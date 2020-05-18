@@ -1,15 +1,17 @@
 'use strict';
 
 require("../../../psknode/bundles/testsRuntime");
-const SecretDID = require('../lib/DID/SecretDID');
-const ZKDID = require('../lib/DID/ZKDID');
-
 const dc = require("double-check");
 const assert = dc.assert;
 
+const DID_TYPES = require('../lib/constants').DID_TYPES;
+const DIDFactory = require('../lib/DID/Factory');
+const ZKDID = require('../lib/DID/ZKDID');
+
+const didFactory = new DIDFactory();
 
 assert.callback('SecretDID Test', (done) => {
-    const did = new SecretDID({
+    const did = didFactory.create(DID_TYPES.Secret, {
         dlDomain: 'local',
         favouriteEndpoint: 'http://localhost:8080'
     });
@@ -29,7 +31,7 @@ assert.callback('SecretDID Test', (done) => {
     assert.true(did.getZKDID() instanceof ZKDID, 'DID returns a ZKDID');
 
 
-    const didFromUrl = new SecretDID(didUrl);
+    const didFromUrl = didFactory.create(didUrl);
     assert.true(didFromUrl.getDLDomain() === did.getDLDomain(), 'Restored DID has correct DLDomain');
     assert.true(didFromUrl.getFavouriteEndpoint() === did.getFavouriteEndpoint(), 'Restored DID has correct favourite endpoint');
     assert.true(didFromUrl.getKey().toString('hex') === did.getKey().toString('hex'), 'Restored DID has correct key');

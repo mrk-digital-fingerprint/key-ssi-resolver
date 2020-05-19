@@ -55,10 +55,10 @@ let bootstrapingService;
 let keyDidResolver;
 let favouriteEndpoint = 'http://localhost:{port}';
 
-testUtils.createTestFolder('create_bar_test_folder', (err, testFolder) => {
+testUtils.createTestFolder('load_bar_test_folder', (err, testFolder) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to create test folder');
 
-    assert.callback('Create Bar Test', (done) => {
+    assert.callback('Load Bar Test', (done) => {
         tir.launchVirtualMQNode(10, testFolder, (err, serverPort) => {
             assert.true(err === null || typeof err === 'undefined', 'Failed to create server');
 
@@ -71,30 +71,38 @@ testUtils.createTestFolder('create_bar_test_folder', (err, testFolder) => {
                 dlDomain: 'local'
             });
 
-            runTest(done);
+            createBar((err, did) => {
+                assert.true(typeof err === 'undefined', 'DSU is writable');
+                runTest(did, done);
+            });
         })
     }, 2000);
 });
 
-function runTest(callback) {
+function createBar(callback) {
     keyDidResolver.createDSU(DSU_REPRESENTATIONS.Bar, {
         favouriteEndpoint
     }, (err, dsu) => {
+
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
 
         dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
-
-            assert.true(typeof err === 'undefined', 'DSU is writable');
-
-            dsu.readFile('my-file.txt', (err, data) => {
-
-                assert.true(typeof err === 'undefined', 'DSU is readable');
-                assert.true(data.toString() === 'Lorem Ipsum', 'File was read correctly');
-
-                callback();
-            })
+            callback(err, dsu.getDID());
         })
+    });
+}
+
+function runTest(did, callback) {
+    keyDidResolver.loadDSU(did, DSU_REPRESENTATIONS.Bar, (err, dsu) => {
+        assert.true(typeof err === 'undefined', 'No error while loading the DSU');
+
+        dsu.readFile('my-file.txt', (err, data) => {
+            assert.true(typeof err === 'undefined', 'No error while reading file from DSU');
+
+            assert.true(data.toString() === 'Lorem Ipsum', 'File has the correct content');
+            callback();
+        });
     });
 }
 

@@ -37,6 +37,7 @@ function initialize(options) {
     $$.keyDidResolver = factory(options);
     $$.dsuFactory = keyDidResolver.getDSUFactory();
     $$.bootstrapingService = keyDidResolver.getBootstrapingService();
+    $$.anchorVerificationStrategy = keyDidResolver.getAnchorVerificationStrategyFactory();
 }
 
 module.exports = {

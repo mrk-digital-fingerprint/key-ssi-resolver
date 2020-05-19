@@ -84,7 +84,6 @@ function runTest(callback) {
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
 
         dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
-
             assert.true(typeof err === 'undefined', 'DSU is writable');
 
             dsu.readFile('my-file.txt', (err, data) => {

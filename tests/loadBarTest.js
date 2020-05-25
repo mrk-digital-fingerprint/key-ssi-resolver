@@ -88,7 +88,9 @@ function createBar(callback) {
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
 
         dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
-            callback(err, dsu.getDID());
+            dsu.writeFile('my-second-file.txt', 'Iorem Lpsum', (err, hash) => {
+                callback(err, dsu.getDID());
+            })
         })
     });
 }

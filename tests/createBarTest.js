@@ -89,6 +89,7 @@ function runTest(callback) {
 
             dsu.readFile('/something/something/darkside/my-file.txt', (err, data) => {
                 console.log(err);
+                console.log(data.toString());
 
                 assert.true(typeof err === 'undefined', 'DSU is readable');
                 assert.true(data.toString() === 'Lorem Ipsum', 'File was read correctly');

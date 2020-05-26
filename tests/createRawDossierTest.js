@@ -73,7 +73,7 @@ testUtils.createTestFolder('create_raw_dossier_test_folder', (err, testFolder) =
 
             runTest(done);
         })
-    }, 2000 * 3600);
+    }, 2000);
 });
 
 function runTest(callback) {

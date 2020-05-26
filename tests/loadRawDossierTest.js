@@ -94,7 +94,7 @@ function createBar(callback) {
 }
 
 function runTest(did, callback) {
-    keyDidResolver.loadDSU(did, DSU_REPRESENTATIONS.Bar, (err, dsu) => {
+    keyDidResolver.loadDSU(did, DSU_REPRESENTATIONS.RawDossier, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
         dsu.readFile('my-file.txt', (err, data) => {

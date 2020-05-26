@@ -58,7 +58,7 @@ let favouriteEndpoint = 'http://localhost:{port}';
 testUtils.createTestFolder('create_raw_dossier_test_folder', (err, testFolder) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to create test folder');
 
-    assert.callback('Create Bar Test', (done) => {
+    assert.callback('Create RawDossier Test', (done) => {
         tir.launchVirtualMQNode(10, testFolder, (err, serverPort) => {
             assert.true(err === null || typeof err === 'undefined', 'Failed to create server');
 
@@ -73,7 +73,7 @@ testUtils.createTestFolder('create_raw_dossier_test_folder', (err, testFolder) =
 
             runTest(done);
         })
-    }, 2000);
+    }, 2000 * 3600);
 });
 
 function runTest(callback) {

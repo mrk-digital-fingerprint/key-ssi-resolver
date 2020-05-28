@@ -95,6 +95,7 @@ function runTest(callback) {
 
 function writeAndReadTest(dsu, callback) {
     dsu.writeFile(FILE_PATH, FILE_CONTENT, (err, hash) => {
+        console.log(err);
         assert.true(typeof err === 'undefined', 'DSU is writable');
 
         dsu.readFile(FILE_PATH, (err, data) => {
@@ -110,6 +111,7 @@ function loadTest(did, callback) {
     keyDidResolver.loadDSU(did, DSU_REPRESENTATIONS.Bar, {
         anchorVerificationStrategyName: ANCHOR_VERIFICATION_STRATEGIES.Diff
     }, (err, dsu) => {
+        console.log(err);
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
         dsu.readFile(FILE_PATH, (err, data) => {

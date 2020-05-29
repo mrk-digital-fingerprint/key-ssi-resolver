@@ -5,7 +5,7 @@ require("../../../psknode/bundles/testsRuntime");
 const dc = require("double-check");
 const assert = dc.assert;
 
-const DID_TYPES = require('../lib/constants').DID_TYPES;
+const didTypes = require('../lib/constants').didTypes;
 const DIDFactory = require('../lib/DID/Factory');
 const SecretDID = require('../lib/DID/SecretDID');
 const ZKDID = require('../lib/DID/ZKDID');
@@ -17,7 +17,7 @@ assert.callback('DIDFactory create error - not enough parameters test', (done) =
     let createException;
 
     try {
-        secretDID = didFactory.create(DID_TYPES.Secret);
+        secretDID = didFactory.create(didTypes.SECRET);
     } catch (e) {
         createException = e;
     }
@@ -27,7 +27,7 @@ assert.callback('DIDFactory create error - not enough parameters test', (done) =
 });
 
 assert.callback('DIDFactory create new DID test', (done) => {
-    const secretDID = didFactory.create(DID_TYPES.Secret, {
+    const secretDID = didFactory.create(didTypes.SECRET, {
         'dlDomain': 'local',
         'favouriteEndpoint': 'http://localhost:8080'
     });
@@ -43,7 +43,7 @@ assert.callback('DIDFactory create new DID test', (done) => {
 });
 
 assert.callback('DIDFactory create a ZKDID test', (done) => {
-    const secretDID = didFactory.create(DID_TYPES.Secret, {
+    const secretDID = didFactory.create(didTypes.SECRET, {
         'dlDomain': 'local',
         'favouriteEndpoint': 'http://localhost:8080'
     });

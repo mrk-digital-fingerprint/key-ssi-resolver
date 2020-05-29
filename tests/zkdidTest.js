@@ -5,14 +5,14 @@ require("../../../psknode/bundles/testsRuntime");
 const dc = require("double-check");
 const assert = dc.assert;
 
-const DID_TYPES = require('../lib/constants').DID_TYPES;
+const didTypes = require('../lib/constants').didTypes;
 const DIDFactory = require('../lib/DID/Factory');
 const ZKDID = require('../lib/DID/ZKDID');
 
 const didFactory = new DIDFactory();
 
 assert.callback('ZKDID Test', (done) => {
-    const did = didFactory.create(DID_TYPES.Secret, {
+    const did = didFactory.create(didTypes.SECRET, {
         dlDomain: 'local',
         version: '1',
         favouriteEndpoint: 'http://localhost:8080'

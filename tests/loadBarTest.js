@@ -4,7 +4,7 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const DSU_REPRESENTATIONS = require('../lib/constants').BUILTIN_DSU_REPR;
+const dsuRepresentations = require('../lib/constants').builtinDSURepr;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -21,7 +21,7 @@ testUtils.didResolverFactory({testFolder: 'load_bar_test_folder', testName: 'Loa
 });
 
 function createBar(callback) {
-    keyDidResolver.createDSU(DSU_REPRESENTATIONS.Bar, {
+    keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint
     }, (err, dsu) => {
 
@@ -37,7 +37,7 @@ function createBar(callback) {
 }
 
 function runTest(did, callback) {
-    keyDidResolver.loadDSU(did, DSU_REPRESENTATIONS.Bar, (err, dsu) => {
+    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, (err, dsu) => {
         console.log(err);
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 

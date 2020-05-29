@@ -4,7 +4,7 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const DSU_REPRESENTATIONS = require('../lib/constants').BUILTIN_DSU_REPR;
+const dsuRepresentations = require('../lib/constants').builtinDSURepr;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -17,7 +17,7 @@ testUtils.didResolverFactory({testFolder: 'create_bar_test_folder', testName: 'C
 });
 
 function runTest(callback) {
-    keyDidResolver.createDSU(DSU_REPRESENTATIONS.Bar, {
+    keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');

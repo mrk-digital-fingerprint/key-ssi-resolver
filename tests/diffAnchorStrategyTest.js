@@ -1,85 +1,24 @@
 'use strict';
-
-require('../../../psknode/bundles/testsRuntime');
-require('../../../psknode/bundles/edfsBar');
-
-const tir = require('../../../psknode/tests/util/tir.js');
 const testUtils = require('./utils');
-
 const dc = require("double-check");
 const assert = dc.assert;
 
 const constants = require('../lib/constants');
-const KeyDIDResolver = require('../lib/KeyDIDResolver');
-const BootstrapingService = require('../lib/BootstrapingService').Service;
-
 const DSU_REPRESENTATIONS = constants.BUILTIN_DSU_REPR;
 const ANCHOR_VERIFICATION_STRATEGIES = constants.BUILTIN_ANCHOR_VERIFICATION_STRATEGIES;
 
-const options = {
-    endpointsConfiguration: {
-        brickEndpoints: [
-            {
-                endpoint: 'http://localhost:8081',
-                protocol: 'EDFS',
-            },
-            {
-                endpoint: 'http://localhost:8002',
-                protocol: 'EDFS'
-            },
-            {
-                // placeholder will be replaced after a server node
-                // is started
-                endpoint: 'http://localhost:{port}',
-                protocol: 'EDFS' // working endpoint
-            }
-        ],
-        aliasEndpoints: [
-            {
-                endpoint: 'http://localhost:8081',
-                protocol: 'EDFS'
-            },
-            {
-                endpoint: 'http://localhost:8000',
-                protocol: 'EDFS'
-            },
-            {
-                // placeholder will be replaced after a server node
-                // is started
-                endpoint: 'http://localhost:{port}',
-                protocol: 'EDFS' // working endpoint
-            }
-        ]
-    },
-    dlDomain: 'localDomain'
-};
-
-let bootstrapingService;
 let keyDidResolver;
-let favouriteEndpoint = 'http://localhost:{port}';
+let favouriteEndpoint;
 
 const FILE_PATH = '/something/something/darkside/my-file.txt';
 const FILE_CONTENT =  'Lorem Ipsum';
 
-testUtils.createTestFolder('create_bar_test_folder', (err, testFolder) => {
-    assert.true(err === null || typeof err === 'undefined', 'Failed to create test folder');
+testUtils.didResolverFactory({testFolder: 'diff_as_test', testName: 'Diff AnchorVer strategy test'}, (err, result) => {
+    assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
+    keyDidResolver = result.keyDidResolver;
+    favouriteEndpoint = result.favouriteEndpoint
 
-    assert.callback('DiffAnchorVerificationStrategy Test', (done) => {
-        tir.launchVirtualMQNode(10, testFolder, (err, serverPort) => {
-            assert.true(err === null || typeof err === 'undefined', 'Failed to create server');
-
-            testUtils.setValidPort(serverPort, options.endpointsConfiguration, 2);
-            favouriteEndpoint = favouriteEndpoint.replace('{port}', serverPort);
-
-            bootstrapingService = new BootstrapingService(options.endpointsConfiguration);
-            keyDidResolver = new KeyDIDResolver({
-                bootstrapingService,
-                dlDomain: 'local'
-            });
-
-            runTest(done);
-        })
-    }, 2000);
+    runTest(result.doneCallback);
 });
 
 function runTest(callback) {

@@ -42,5 +42,7 @@ function initialize(options) {
 
 module.exports = {
     initialize,
-    constants
+    constants,
+    DIDMixin: require('./lib/DID/DIDMixin'),
+    AnchoringStrategyMixin: require('./lib/AnchoringStrategy/AnchoringStrategyMixin')
 };

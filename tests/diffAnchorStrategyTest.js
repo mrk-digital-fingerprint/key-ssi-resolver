@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const anchorVerificationStrategies = constants.builtinAnchorVerificationStrategies;
+const anchoringStrategies = constants.builtinAnchoringStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -13,7 +13,7 @@ let favouriteEndpoint;
 const FILE_PATH = '/something/something/darkside/my-file.txt';
 const FILE_CONTENT =  'Lorem Ipsum';
 
-testUtils.didResolverFactory({testFolder: 'diff_as_test', testName: 'Diff AnchorVer strategy test'}, (err, result) => {
+testUtils.didResolverFactory({testFolder: 'diff_as_test', testName: 'Diff anchoring strategy test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
     keyDidResolver = result.keyDidResolver;
     favouriteEndpoint = result.favouriteEndpoint
@@ -24,7 +24,7 @@ testUtils.didResolverFactory({testFolder: 'diff_as_test', testName: 'Diff Anchor
 function runTest(callback) {
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
@@ -48,7 +48,7 @@ function writeAndReadTest(dsu, callback) {
 
 function loadTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         console.log(err);
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
@@ -76,7 +76,7 @@ function deleteTest(dsu, callback) {
 
 function renameTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
@@ -94,7 +94,7 @@ function renameTest(did, callback) {
 
 function renameTestAfterLoad(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 

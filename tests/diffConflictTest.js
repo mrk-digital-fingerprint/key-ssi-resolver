@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const anchorVerificationStrategies = constants.builtinAnchorVerificationStrategies;
+const anchoringStrategies = constants.builtinAnchoringStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -16,7 +16,7 @@ const FILE_CONTENT =  'Lorem Ipsum';
 const SECOND_FILE_PATH = '/my-second-file.txt';
 const SECOND_FILE_CONTENT = 'Ipsum Lorem';
 
-testUtils.didResolverFactory({testFolder: 'diff_conflict_test', testName: 'Diff AnchorVer strategy conflict test'}, (err, result) => {
+testUtils.didResolverFactory({testFolder: 'diff_conflict_test', testName: 'Diff anchoring strategy conflict test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
     keyDidResolver = result.keyDidResolver;
     favouriteEndpoint = result.favouriteEndpoint
@@ -27,7 +27,7 @@ testUtils.didResolverFactory({testFolder: 'diff_conflict_test', testName: 'Diff 
 function runTest(callback) {
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
@@ -50,7 +50,7 @@ function writeAndReadTest(dsu, callback) {
 
 function loadSameDSU(did, oldDSU, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
@@ -72,7 +72,7 @@ function writeFileInOldDSU(dsu, callback) {
 
 function readFilesTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchorVerificationStrategyName: anchorVerificationStrategies.DIFF
+        anchoringStrategy: anchoringStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 

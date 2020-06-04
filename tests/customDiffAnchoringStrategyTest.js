@@ -37,31 +37,34 @@ function runTest(callback) {
      * @param {BarMap} sessionBarMap 
      * @param {callback} callback 
      */
-    function decisionCallback(sessionBarMap, callback) {
+    function decisionFunction(sessionBarMap, callback) {
         if (writesCounter++ < 3) {
-            return callback(false);
+            return callback(undefined, false);
         }
 
-        return callback(true);
+        writesCounter = 0;
+        return callback(undefined, true);
     }
 
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
         anchoringStrategy: anchoringStrategies.DIFF,
         anchoringStrategyOptions: {
-            decisionCb: decisionCallback,
+            decisionFn: decisionFunction,
             anchoringCb: anchoringCallback
         }
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         did = dsu.getDID();
 
-        writeFile(dsu, '/file1.txt', 'Lorem 1', () => {
-            writeFile(dsu, '/file2.txt', 'Lorem 2', () => {
-                writeFile(dsu, '/file3.txt', 'Lorem 3', () => {
+        assertFileWasWritten(dsu, '/file1.txt', 'Lorem 1', () => {
+            assertFileWasWritten(dsu, '/file2.txt', 'Lorem 2', () => {
+                assertFileWasWritten(dsu, '/file3.txt', 'Lorem 3', () => {
                     assertChangesWereNotAnchored(did, () => {
-                        dsu.writeFile('/file4.txt', 'Lorem 4', (err) => {
-                            assert.true(typeof err === 'undefined', 'DSU is writable');
+                        assertFileWasWritten(dsu, '/file4.txt', 'Lorem 4', () => {
+                            assertFileWasWritten(dsu, '/file5.txt', 'Lorem 5', () => {
+                                console.log('File was written to a new session');
+                            })
                         })
                     })
                 })
@@ -71,7 +74,7 @@ function runTest(callback) {
     });
 }
 
-function writeFile(dsu, filename, data, callback) {
+function assertFileWasWritten(dsu, filename, data, callback) {
     dsu.writeFile(filename, data, (err, hash) => {
         assert.true(typeof err === 'undefined', 'DSU is writable');
 

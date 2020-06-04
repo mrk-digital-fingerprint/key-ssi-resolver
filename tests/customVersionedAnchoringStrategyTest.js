@@ -37,19 +37,19 @@ function runTest(callback) {
      * @param {BarMap} sessionBarMap 
      * @param {callback} callback 
      */
-    function decisionCallback(sessionBarMap, callback) {
+    function decisionFunction(sessionBarMap, callback) {
         if (writesCounter++ < 3) {
-            return callback(false);
+            return callback(undefined, false);
         }
 
-        return callback(true);
+        return callback(undefined, true);
     }
 
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
         anchoringStrategy: anchoringStrategies.VERSIONED,
         anchoringStrategyOptions: {
-            decisionCb: decisionCallback,
+            decisionFn: decisionFunction,
             anchoringCb: anchoringCallback
         }
     }, (err, dsu) => {

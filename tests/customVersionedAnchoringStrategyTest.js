@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const anchoringStrategies = constants.builtinAnchoringStrategies;
+const barMapStrategies = constants.builtinBarMapStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -47,8 +47,8 @@ function runTest(callback) {
 
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        anchoringStrategy: anchoringStrategies.VERSIONED,
-        anchoringStrategyOptions: {
+        barMapStrategy: barMapStrategies.VERSIONED,
+        anchoringOptions: {
             decisionFn: decisionFunction,
             anchoringCb: anchoringCallback
         }
@@ -84,7 +84,7 @@ function writeFile(dsu, filename, data, callback) {
 
 function assertChangesWereNotAnchored(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchoringStrategy: anchoringStrategies.VERSIONED,
+        barMapStrategy: barMapStrategies.VERSIONED,
     }, (err, dsu) => {
         assert.true(typeof err !== 'undefined', "DSU hasn't been anchored");
         callback();
@@ -93,7 +93,7 @@ function assertChangesWereNotAnchored(did, callback) {
 
 function assertChangesWereAnchored(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchoringStrategy: anchoringStrategies.VERSIONED,
+        barMapStrategy: barMapStrategies.VERSIONED,
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', "DSU has been anchored");
 

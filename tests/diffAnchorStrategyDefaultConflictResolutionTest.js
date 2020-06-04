@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const anchoringStrategies = constants.builtinAnchoringStrategies;
+const barMapStrategies = constants.builtinBarMapStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -27,7 +27,7 @@ testUtils.didResolverFactory({testFolder: 'diff_conflict_test', testName: 'Diff 
 function runTest(callback) {
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        anchoringStrategy: anchoringStrategies.DIFF
+        barMapStrategy: barMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
@@ -50,7 +50,7 @@ function writeAndReadTest(dsu, callback) {
 
 function loadSameDSU(did, oldDSU, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchoringStrategy: anchoringStrategies.DIFF
+        barMapStrategy: barMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
@@ -72,7 +72,7 @@ function writeFileInOldDSU(dsu, callback) {
 
 function readFilesTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchoringStrategy: anchoringStrategies.DIFF
+        barMapStrategy: barMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 

@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const anchoringStrategies = constants.builtinAnchoringStrategies;
+const barMapStrategies = constants.builtinBarMapStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -13,7 +13,7 @@ let favouriteEndpoint;
 const FILE_PATH = '/something/something/darkside/my-file.txt';
 const FILE_CONTENT =  'Lorem Ipsum';
 
-testUtils.didResolverFactory({testFolder: 'custom_versioned_as_test', testName: 'Custom Versioned anchoring strategy test'}, (err, result) => {
+testUtils.didResolverFactory({testFolder: 'custom_diff_as_test', testName: 'Custom Diff anchoring strategy test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
     keyDidResolver = result.keyDidResolver;
     favouriteEndpoint = result.favouriteEndpoint
@@ -48,8 +48,8 @@ function runTest(callback) {
 
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        anchoringStrategy: anchoringStrategies.DIFF,
-        anchoringStrategyOptions: {
+        barMapStrategy: barMapStrategies.DIFF,
+        anchoringOptions: {
             decisionFn: decisionFunction,
             anchoringCb: anchoringCallback
         }
@@ -89,7 +89,7 @@ function assertFileWasWritten(dsu, filename, data, callback) {
 
 function assertChangesWereNotAnchored(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchoringStrategy: anchoringStrategies.DIFF,
+        barMapStrategy: barMapStrategies.DIFF,
     }, (err, dsu) => {
         assert.true(typeof err !== 'undefined', "DSU hasn't been anchored");
         callback();
@@ -98,7 +98,7 @@ function assertChangesWereNotAnchored(did, callback) {
 
 function assertChangesWereAnchored(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        anchoringStrategy: anchoringStrategies.DIFF,
+        barMapStrategy: barMapStrategies.DIFF,
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', "DSU has been anchored");
 

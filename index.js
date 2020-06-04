@@ -37,12 +37,12 @@ function initialize(options) {
     $$.keyDidResolver = factory(options);
     $$.dsuFactory = keyDidResolver.getDSUFactory();
     $$.bootstrapingService = keyDidResolver.getBootstrapingService();
-    $$.anchoringStrategyFactory = keyDidResolver.getAnchoringStrategyFactory();
+    $$.barMapStrategyFactory = keyDidResolver.getBarMapStrategyFactory();
 }
 
 module.exports = {
     initialize,
     constants,
     DIDMixin: require('./lib/DID/DIDMixin'),
-    AnchoringStrategyMixin: require('./lib/AnchoringStrategy/AnchoringStrategyMixin')
+    BarMapStrategyMixin: require('./lib/BarMapStrategy/BarMapStrategyMixin')
 };

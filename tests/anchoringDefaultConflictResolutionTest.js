@@ -16,7 +16,7 @@ const FILE_CONTENT =  'Lorem Ipsum';
 const SECOND_FILE_PATH = '/my-second-file.txt';
 const SECOND_FILE_CONTENT = 'Ipsum Lorem';
 
-testUtils.didResolverFactory({testFolder: 'diff_conflict_test', testName: 'Diff anchoring strategy conflict test'}, (err, result) => {
+testUtils.didResolverFactory({testFolder: 'anchoring_default_conflict_resolution_test', testName: 'Anchoring default conflict resolution test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
     keyDidResolver = result.keyDidResolver;
     favouriteEndpoint = result.favouriteEndpoint

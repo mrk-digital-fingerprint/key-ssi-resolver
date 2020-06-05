@@ -38,11 +38,9 @@ function createBar(callback) {
 
 function runTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, (err, dsu) => {
-        console.log(err);
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
         dsu.readFile('my-file.txt', (err, data) => {
-            console.log(err);
             assert.true(typeof err === 'undefined', 'No error while reading file from DSU');
 
             assert.true(data.toString() === 'Lorem Ipsum', 'File has the correct content');

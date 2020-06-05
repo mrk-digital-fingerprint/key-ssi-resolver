@@ -122,7 +122,7 @@ function didResolverFactory(options, callback) {
                     dlDomain: options.dlDomain
                 });
             })
-        })
+        }, 2000);
     })
 }
 

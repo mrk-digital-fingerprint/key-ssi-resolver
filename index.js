@@ -35,9 +35,9 @@ function factory(options) {
  */
 function initialize(options) {
     $$.keyDidResolver = factory(options);
-    $$.dsuFactory = keyDidResolver.getDSUFactory();
-    $$.bootstrapingService = keyDidResolver.getBootstrapingService();
-    $$.barMapStrategyFactory = keyDidResolver.getBarMapStrategyFactory();
+    $$.dsuFactory = $$.keyDidResolver.getDSUFactory();
+    $$.bootstrapingService = $$.keyDidResolver.getBootstrapingService();
+    $$.barMapStrategyFactory = $$.keyDidResolver.getBarMapStrategyFactory();
 }
 
 module.exports = {

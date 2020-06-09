@@ -28,8 +28,10 @@ function createBar(callback) {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'RawDossier', 'DSU has the correct class');
 
-        dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
-            callback(err, dsu.getDID());
+        dsu.createFolder('/files', (err) => {
+            dsu.writeFile('/my-file.txt', 'Lorem Ipsum', (err, hash) => {
+                callback(err, dsu.getDID());
+            })
         })
     });
 }
@@ -38,11 +40,22 @@ function runTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.RAW_DOSSIER, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
-        dsu.readFile('my-file.txt', (err, data) => {
+        dsu.readFile('/my-file.txt', (err, data) => {
             assert.true(typeof err === 'undefined', 'No error while reading file from DSU');
 
             assert.true(data.toString() === 'Lorem Ipsum', 'File has the correct content');
-            callback();
+
+            dsu.listFolders('/', (err, data) => {
+                assert.true(typeof err === 'undefined', 'No error while listing folders');
+                assert.true(data.indexOf('files') === 0, 'Created folder exists');
+
+                dsu.listFiles('/files', (err, files) => {
+                    assert.true(typeof err === 'undefined', 'No error while listing files');
+                    assert.true(files.length === 0, 'Created folder is empty');
+                    callback();
+                })
+
+            })
         });
     });
 }

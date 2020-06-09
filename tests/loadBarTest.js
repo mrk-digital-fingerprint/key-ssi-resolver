@@ -28,9 +28,11 @@ function createBar(callback) {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
 
-        dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
-            dsu.writeFile('my-second-file.txt', 'Iorem Lpsum', (err, hash) => {
-                callback(err, dsu.getDID());
+        dsu.createFolder('/created-folder', (err) => {
+            dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
+                dsu.writeFile('/created-folder/my-second-file.txt', 'Iorem Lpsum', (err, hash) => {
+                    callback(err, dsu.getDID());
+                })
             })
         })
     });
@@ -44,7 +46,12 @@ function runTest(did, callback) {
             assert.true(typeof err === 'undefined', 'No error while reading file from DSU');
 
             assert.true(data.toString() === 'Lorem Ipsum', 'File has the correct content');
-            callback();
+
+            dsu.readFile('/created-folder/my-second-file.txt', (err, data) => {
+                assert.true(typeof err === 'undefined', 'No error while reading second file from DSU');
+                assert.true(data.toString() === 'Iorem Lpsum', 'Second file has the correct content');
+                callback();
+            })
         });
     });
 }

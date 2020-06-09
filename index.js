@@ -44,5 +44,7 @@ module.exports = {
     initialize,
     constants,
     DIDMixin: require('./lib/DID/DIDMixin'),
-    BarMapStrategyMixin: require('./lib/BarMapStrategy/BarMapStrategyMixin')
+    BarMapStrategyMixin: require('./lib/BarMapStrategy/BarMapStrategyMixin'),
+    // TODO: exposed for compatibility reasons. Remove it after switching completely to psk-key-did-resolver
+    BarMapStrategyFactory: require('./lib/BarMapStrategy/Factory')
 };

@@ -4,8 +4,8 @@ const assert = require("double-check").assert;
 const SeedSSI = require("../../lib/SSIs/SeedSSIs/SeedSSI");
 const ZaSSI = require("../../lib/SSIs/KeySSIs/ZaSSI");
 
-const seedSSI = new SeedSSI()
-seedSSI.initialize("seed", "domain", "encKey", "control");
+const seedSSI = new SeedSSI();
+seedSSI.load("seed", "domain", "encKey", "control");
 const seedSSIIdentifier = `ssi:seed:domain:${crypto.pskBase58Encode("encKey")}:control:v0`;
 const zaSSIIdentifier = `ssi:za:domain:${crypto.pskBase58Encode(crypto.pskHash("encKey"))}:control:v0`;
 const newZaSSI = new ZaSSI(zaSSIIdentifier);

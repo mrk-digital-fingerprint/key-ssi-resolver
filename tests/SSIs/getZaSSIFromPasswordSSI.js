@@ -1,7 +1,7 @@
 require("../../../../psknode/bundles/testsRuntime");
 const crypto = require("pskcrypto");
 const assert = require("double-check").assert;
-const PasswordSSI = require("../../lib/SSIs/SeedSSIs/PasswordSSI");
+const PasswordSSI = require("../../lib/KeySSIs/SeedSSIs/PasswordSSI");
 
 const passwordSSI = new PasswordSSI()
 passwordSSI.initialize("seed", "domain", "encKey", "control");

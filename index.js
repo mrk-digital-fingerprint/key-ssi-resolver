@@ -1,6 +1,6 @@
 'use strict';
 
-const KeyDIDResolver = require('./lib/KeyDIDResolver');
+const KeySSIResolver = require('./lib/KeySSIResolver');
 const BootstrapingService = require('./lib/BootstrapingService').Service;
 const constants = require('./lib/constants');
 
@@ -15,12 +15,12 @@ function factory(options) {
     options = options || {};
     const bootstrapingService = new BootstrapingService(options.endpointsConfiguration);
 
-    const keyDidResolver = new KeyDIDResolver({
+    const keySSIResolver = new KeySSIResolver({
         bootstrapingService,
         dlDomain: options.dlDomain
     });
 
-    return keyDidResolver;
+    return keySSIResolver;
 }
 
 /**
@@ -34,10 +34,10 @@ function factory(options) {
  * @param {string} options.dlDomain
  */
 function initialize(options) {
-    $$.keyDidResolver = factory(options);
-    $$.dsuFactory = $$.keyDidResolver.getDSUFactory();
-    $$.bootstrapingService = $$.keyDidResolver.getBootstrapingService();
-    $$.barMapStrategyFactory = $$.keyDidResolver.getBarMapStrategyFactory();
+    $$.keySSIResolver = factory(options);
+    $$.dsuFactory = $$.keySSIResolver.getDSUFactory();
+    $$.bootstrapingService = $$.keySSIResolver.getBootstrapingService();
+    $$.barMapStrategyFactory = $$.keySSIResolver.getBarMapStrategyFactory();
 }
 
 module.exports = {

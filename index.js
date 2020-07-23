@@ -1,7 +1,6 @@
 'use strict';
 
 const KeySSIResolver = require('./lib/KeySSIResolver');
-const BootstrapingService = require('./lib/BootstrapingService').Service;
 const constants = require('./lib/constants');
 
 /**
@@ -13,12 +12,7 @@ const constants = require('./lib/constants');
  */
 function factory(options) {
     options = options || {};
-    const bootstrapingService = new BootstrapingService(options.endpointsConfiguration);
-
-    const keySSIResolver = new KeySSIResolver({
-        bootstrapingService,
-        dlDomain: options.dlDomain
-    });
+    const keySSIResolver = new KeySSIResolver(options);
 
     return keySSIResolver;
 }
@@ -34,17 +28,12 @@ function factory(options) {
  * @param {string} options.dlDomain
  */
 function initialize(options) {
-    $$.keySSIResolver = factory(options);
-    $$.dsuFactory = $$.keySSIResolver.getDSUFactory();
-    $$.bootstrapingService = $$.keySSIResolver.getBootstrapingService();
-    $$.barMapStrategyFactory = $$.keySSIResolver.getBarMapStrategyFactory();
+    return factory(options);
 }
 
 module.exports = {
     initialize,
     constants,
     DIDMixin: require('./lib/DID/DIDMixin'),
-    BarMapStrategyMixin: require('./lib/BarMapStrategy/BarMapStrategyMixin'),
-    // TODO: exposed for compatibility reasons. Remove it after switching completely to psk-key-did-resolver
-    BarMapStrategyFactory: require('./lib/BarMapStrategy/Factory')
+    KeySSIFactory: require('./lib/KeySSIs/KeySSIFactory')
 };

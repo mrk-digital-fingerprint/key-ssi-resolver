@@ -6,7 +6,7 @@ const tir = require('../../../psknode/tests/util/tir.js');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const pskKeyDidResolver = require('psk-key-did-resolver');
+const pskKeyDidResolver = require('key-ssi-resolver');
 
 assert.callback('Smoke Test', (done) => {
     tir.launchVirtualMQNode(10, os.tmpdir(), (err, serverPort) => {

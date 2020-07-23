@@ -8,7 +8,7 @@ require('../../../psknode/bundles/edfsBar');
 const tir = require('../../../psknode/tests/util/tir.js');
 const dc = require("double-check");
 const assert = dc.assert;
-const KeyDIDResolver = require('../lib/KeyDIDResolver');
+const KeySSIResolver = require('../lib/KeySSIResolver');
 const BootstrapingService = require('../lib/BootstrapingService').Service;
 
 const defaultDIDResolverConfiguration = {
@@ -110,7 +110,7 @@ function didResolverFactory(options, callback) {
                 options.favouriteEndpoint = options.favouriteEndpoint.replace('{port}', serverPort);
 
                 const bootstrapingService = new BootstrapingService(options.configuration.endpointsConfiguration);
-                const keyDidResolver = new KeyDIDResolver({
+                const keyDidResolver = new KeySSIResolver({
                     bootstrapingService,
                     dlDomain: options.dlDomain || 'local'
                 });

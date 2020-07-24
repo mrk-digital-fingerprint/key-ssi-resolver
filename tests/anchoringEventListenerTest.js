@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const barMapStrategies = constants.builtinBarMapStrategies;
+const brickMapStrategies = constants.builtinBrickMapStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -35,7 +35,7 @@ function runTest(callback) {
             }
 
             keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-                barMapStrategy: barMapStrategies.DIFF,
+                brickMapStrategy: brickMapStrategies.DIFF,
             }, (err, dsu) => {
                     assert.true(typeof err === 'undefined', "DSU has been anchored");
                     assertFileWasAnchored(dsu, '/file5.txt', 'Lorem 5', () => {
@@ -48,10 +48,10 @@ function runTest(callback) {
     /**
      * 
      * Anchor changes after 3 writes
-     * @param {BarMap} sessionBarMap 
+     * @param {BrickMap} sessionBrickMap 
      * @param {callback} callback 
      */
-    function decisionFunction(sessionBarMap, callback) {
+    function decisionFunction(sessionBrickMap, callback) {
         if (writesCounter++ < 3) {
             return callback(undefined, false);
         }
@@ -61,7 +61,7 @@ function runTest(callback) {
 
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        barMapStrategy: barMapStrategies.DIFF,
+        brickMapStrategy: brickMapStrategies.DIFF,
         anchoringOptions: {
             decisionFn: decisionFunction,
             anchoringEventListener: anchoringEventListener
@@ -102,7 +102,7 @@ function assertFileWasWritten(dsu, filename, data, callback) {
 
 function assertChangesWereNotAnchored(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        barMapStrategy: barMapStrategies.DIFF,
+        brickMapStrategy: brickMapStrategies.DIFF,
     }, (err, dsu) => {
         assert.true(typeof err !== 'undefined', "DSU hasn't been anchored");
         callback();
@@ -111,7 +111,7 @@ function assertChangesWereNotAnchored(did, callback) {
 
 function assertFirst4FilesWereAnchored(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        barMapStrategy: barMapStrategies.DIFF,
+        brickMapStrategy: brickMapStrategies.DIFF,
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', "DSU has been anchored");
 

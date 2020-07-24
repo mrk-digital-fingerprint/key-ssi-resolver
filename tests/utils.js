@@ -9,7 +9,7 @@ const tir = require('../../../psknode/tests/util/tir.js');
 const dc = require("double-check");
 const assert = dc.assert;
 const KeySSIResolver = require('../lib/KeySSIResolver');
-const BootstrapingService = require('../lib/BootstrapingService').Service;
+const BootstrapingService = require('../../edfs/lib/BootstrapingService').Service;
 
 const defaultDIDResolverConfiguration = {
     endpointsConfiguration: {

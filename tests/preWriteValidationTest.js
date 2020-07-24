@@ -23,7 +23,7 @@ function runTest(callback) {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
         const preWriteValidation = {
-            validate: (barMap, operation, path, options, callback) => {
+            validate: (brickMap, operation, path, options, callback) => {
                 return callback(new Error('Validation error'));
             }
         }

@@ -35,10 +35,10 @@ assert.callback('Smoke Test', (done) => {
         assert.true($$.keyDidResolver.constructor.name === 'KeyDIDResolver');
         assert.true($$.dsuFactory.constructor.name === 'Factory');
         assert.true($$.bootstrapingService.constructor.name === 'Service');
-        assert.true($$.barMapStrategyFactory.constructor.name === 'Factory');
+        assert.true($$.brickMapStrategyFactory.constructor.name === 'Factory');
 
         assert.true(typeof pskKeyDidResolver.DIDMixin === 'object');
-        assert.true(typeof pskKeyDidResolver.BarMapStrategyMixin === 'object');
+        assert.true(typeof pskKeyDidResolver.BrickMapStrategyMixin === 'object');
         assert.true(typeof pskKeyDidResolver.constants === 'object');
         done();
     });

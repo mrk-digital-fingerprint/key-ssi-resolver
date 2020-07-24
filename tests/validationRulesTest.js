@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const barMapStrategies = constants.builtinBarMapStrategies;
+const brickMapStrategies = constants.builtinBrickMapStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -25,14 +25,14 @@ function runTest(callback) {
         validationRules: {
             preWrite: {
                 /**
-                 * @param {BarMap} A dirty copy of the valid BarMap
+                 * @param {BrickMap} A dirty copy of the valid BrickMap
                  * @param {string} The write operation (addFile, delete, copy, etc...)
-                 * @param {string} The BarMap path to write in
+                 * @param {string} The BrickMap path to write in
                  * @param {object} Corresponding write data. Ex: brick hashes for the write operation
                  * @param {callback} callback
                  */
-                validate: (dirtyBarMap, operation, barMapPath, data, callback) => {
-                    console.log(operation, barMapPath, data);
+                validate: (dirtyBrickMap, operation, brickMapPath, data, callback) => {
+                    console.log(operation, brickMapPath, data);
                     // Assume all writes are valid
                     return callback();
                 }
@@ -52,21 +52,21 @@ function runTest(callback) {
 function loadDSU(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
         validationRules: {
-            barMapHistory: {
+            brickMapHistory: {
                 /**
-                 * @param {Array<BarMap>} A list of BarMap diffs that make up a valid BarMap
+                 * @param {Array<BrickMap>} A list of BrickMap diffs that make up a valid BrickMap
                  * @param {callback} callback
                  */
-                validate: (barMapDiffs, callback) => {
-                    console.log('BarMap History', barMapDiffs);
+                validate: (brickMapDiffs, callback) => {
+                    console.log('BrickMap History', brickMapDiffs);
                     // Assume history is invalid
-                    return callback(new Error('BarMap history is invalid'));
+                    return callback(new Error('BrickMap history is invalid'));
                 }
             }
         }
     }, (err) => {
         assert.true(typeof err !== 'undefined', "DSU cannot be loaded");
-        assert.true(err.message === 'BarMap history is invalid');
+        assert.true(err.message === 'BrickMap history is invalid');
         callback();
     })
 

@@ -5,7 +5,7 @@ const assert = dc.assert;
 
 const constants = require('../lib/constants');
 const dsuRepresentations = constants.builtinDSURepr;
-const barMapStrategies = constants.builtinBarMapStrategies;
+const brickMapStrategies = constants.builtinBrickMapStrategies;
 
 let keyDidResolver;
 let favouriteEndpoint;
@@ -13,7 +13,7 @@ let favouriteEndpoint;
 const FILE_PATH = '/something/something/darkside/my-file.txt';
 const FILE_CONTENT =  'Lorem Ipsum';
 
-testUtils.didResolverFactory({testFolder: 'diff_barmap_strategy_test', testName: 'Diff BarMapStrategy test'}, (err, result) => {
+testUtils.didResolverFactory({testFolder: 'diff_brickmap_strategy_test', testName: 'Diff BrickMapStrategy test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
     keyDidResolver = result.keyDidResolver;
     favouriteEndpoint = result.favouriteEndpoint
@@ -24,7 +24,7 @@ testUtils.didResolverFactory({testFolder: 'diff_barmap_strategy_test', testName:
 function runTest(callback) {
     keyDidResolver.createDSU(dsuRepresentations.BAR, {
         favouriteEndpoint,
-        barMapStrategy: barMapStrategies.DIFF
+        brickMapStrategy: brickMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
@@ -47,7 +47,7 @@ function writeAndReadTest(dsu, callback) {
 
 function loadTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        barMapStrategy: barMapStrategies.DIFF
+        brickMapStrategy: brickMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
@@ -74,7 +74,7 @@ function deleteTest(dsu, callback) {
 
 function renameTest(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        barMapStrategy: barMapStrategies.DIFF
+        brickMapStrategy: brickMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
@@ -93,7 +93,7 @@ function renameTest(did, callback) {
 
 function renameTestAfterLoad(did, callback) {
     keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        barMapStrategy: barMapStrategies.DIFF
+        brickMapStrategy: brickMapStrategies.DIFF
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 

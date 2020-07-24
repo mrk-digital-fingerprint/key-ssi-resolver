@@ -3,7 +3,7 @@ const assert = require("double-check").assert;
 
 const SSITypes = require("../../lib/KeySSIs/SSITypes.js");
 const KeySSIFactory = require("../../lib/KeySSIs/KeySSIFactory.js");
-const seedSSI = KeySSIFactory.createKeySSI(SSITypes.SEED_SSI);
+const seedSSI = KeySSIFactory.create(SSITypes.SEED_SSI);
 
 assert.callback("SeedSSIs test", (callback) => {
     seedSSI.initialize("domain", undefined, undefined, "v0", '', (err) =>{

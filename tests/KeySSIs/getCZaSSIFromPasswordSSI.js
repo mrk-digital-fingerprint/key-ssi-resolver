@@ -4,7 +4,7 @@ const PasswordSSI = require("../../lib/KeySSIs/ConstSSIs/PasswordSSI");
 const ConstSSI = require("../../lib/KeySSIs/ConstSSIs/ConstSSI");
 const CZaSSI = require("../../lib/KeySSIs/ConstSSIs/CZaSSI");
 const passwordSSI = PasswordSSI.createPasswordSSI();
-passwordSSI.initialize("domain", "user", "password", "v0", 2000);
+passwordSSI.initialize("domain", "user", "password", 2000, "v0");
 assert.begin();
 const constSSI = passwordSSI.derive();
 assert.true(constSSI.constructor.name === ConstSSI.createConstSSI().constructor.name);

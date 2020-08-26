@@ -4,7 +4,7 @@ const SSITypes = require("../../lib/KeySSIs/SSITypes");
 
 const KeySSIFactory = require("../../lib/KeySSIs/KeySSIFactory");
 
-const secretSSI = KeySSIFactory.createKeySSI(SSITypes.SECRET_SSI);
+const secretSSI = KeySSIFactory.create(SSITypes.SECRET_SSI);
 secretSSI.load(SSITypes.SECRET_SSI, "domain", "subtype specific string", "v0");
 
 assert.callback("KeySSIs test", (callback) => {

@@ -36,5 +36,6 @@ module.exports = {
     constants,
     DIDMixin: require('./lib/DID/DIDMixin'),
     KeySSIFactory: require('./lib/KeySSIs/KeySSIFactory'),
-    CryptoAlgorithmsRegistry: require('./lib/KeySSIs/CryptoAlgorithmsRegistry')
+    CryptoAlgorithmsRegistry: require('./lib/KeySSIs/CryptoAlgorithmsRegistry'),
+    SSITypes: require("./lib/KeySSIs/SSITypes")
 };

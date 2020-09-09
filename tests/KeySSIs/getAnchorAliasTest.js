@@ -11,7 +11,7 @@ assert.callback("Get anchor alias from SeedSSI test", (callback) => {
             throw err;
         }
 
-        assert.true(seedSSI.getAnchorAlias() === seedSSI.derive().derive().getIdentifier());
+        assert.true(seedSSI.getAnchorId() === seedSSI.derive().derive().getIdentifier());
         callback();
     });
 });

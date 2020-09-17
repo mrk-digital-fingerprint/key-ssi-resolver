@@ -1,21 +1,7 @@
-'use strict';
-
 const KeySSIResolver = require('./lib/KeySSIResolver');
 const constants = require('./lib/constants');
-
-/**
- * Create a new KeyDIDResolver instance
- * @param {object} options
- * @param {object} options.endpointsConfiguration
- * @param {Array<object>} options.endpointsConfiguration.brickEndpoints
- * @param {Array<object>} options.endpointsConfiguration.aliasEndpoints
- */
-function factory(options) {
-    options = options || {};
-    const keySSIResolver = new KeySSIResolver(options);
-
-    return keySSIResolver;
-}
+const DSUFactory = require("./lib/DSUFactory");
+const BootStrapingService = require("./lib/BootstrapingService");
 
 /**
  * Create a new KeyDIDResolver instance and append it to
@@ -28,7 +14,23 @@ function factory(options) {
  * @param {string} options.dlDomain
  */
 function initialize(options) {
-    return factory(options);
+    options = options || {};
+
+    const BrickMapStrategyFactory = require("bar").BrickMapStrategyFactory;
+
+    const bootstrapingService = new BootStrapingService(options);
+    const brickMapStrategyFactory = new BrickMapStrategyFactory();
+    const keySSIFactory = require('./lib/KeySSIs/KeySSIFactory');
+
+    options.dsuFactory =  new DSUFactory({
+        bootstrapingService,
+        brickMapStrategyFactory,
+        keySSIFactory
+    });
+
+    const keySSIResolver = new KeySSIResolver(options);
+
+    return keySSIResolver;
 }
 
 module.exports = {

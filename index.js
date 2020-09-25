@@ -38,5 +38,6 @@ module.exports = {
     constants,
     KeySSIFactory: require('./lib/KeySSIs/KeySSIFactory'),
     CryptoAlgorithmsRegistry: require('./lib/KeySSIs/CryptoAlgorithmsRegistry'),
-    SSITypes: require("./lib/KeySSIs/SSITypes")
+    SSITypes: require("./lib/KeySSIs/SSITypes"),
+    DSUFactory: require("./lib/DSUFactory")
 };

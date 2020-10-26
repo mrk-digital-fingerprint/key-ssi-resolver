@@ -1,6 +1,6 @@
 const KeySSIResolver = require('./lib/KeySSIResolver');
 const constants = require('./lib/constants');
-const DSUFactory = require("./lib/DSUFactory");
+const DSUFactory = require("./lib/DSUFactoryRegistry");
 const BootStrapingService = require("./lib/BootstrapingService");
 
 /**
@@ -39,5 +39,5 @@ module.exports = {
     KeySSIFactory: require('./lib/KeySSIs/KeySSIFactory'),
     CryptoAlgorithmsRegistry: require('./lib/KeySSIs/CryptoAlgorithmsRegistry'),
     SSITypes: require("./lib/KeySSIs/SSITypes"),
-    DSUFactory: require("./lib/DSUFactory")
+    DSUFactory: require("./lib/DSUFactoryRegistry")
 };

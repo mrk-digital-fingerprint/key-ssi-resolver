@@ -3,26 +3,20 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const constants = require('../lib/constants');
-const dsuRepresentations = constants.builtinDSURepr;
-const brickMapStrategies = constants.builtinBrickMapStrategies;
+let resolver;
+let keySSISpace;
 
-let keyDidResolver;
-let favouriteEndpoint;
-
-testUtils.didResolverFactory({testFolder: 'anchoring_options_test', testName: 'Anchoring Options Test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'anchoring_options_test', testName: 'Anchoring Options Test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
 
     runTest(result.doneCallback);
 });
 
 function runTest(callback) {
 
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint,
-        brickMapStrategy: brickMapStrategies.DIFF,
+    resolver.createDSU(keySSISpace.buildSeedSSI("default"), {
         anchoringOptions: {
             /**
              * @param {BrickMap} sessionBrickMap A dirty copy of the current valid BrickMap containing all changes (valid & un-anchored)

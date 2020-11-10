@@ -3,20 +3,14 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const constants = require('../lib/constants');
-const dsuRepresentations = constants.builtinDSURepr;
-const brickMapStrategies = constants.builtinBrickMapStrategies;
+let resolver;
+let keySSISpace;
 
-let keyDidResolver;
-let favouriteEndpoint;
-
-const FILE_PATH = '/something/something/darkside/my-file.txt';
-const FILE_CONTENT =  'Lorem Ipsum';
-
-testUtils.didResolverFactory({testFolder: 'anchoring_ev_listener_test', testName: 'Anchoring Event Listener Test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'anchoring_ev_listener_test', testName: 'Anchoring Event Listener Test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
 
     runTest(result.doneCallback);
 });
@@ -24,32 +18,29 @@ testUtils.didResolverFactory({testFolder: 'anchoring_ev_listener_test', testName
 function runTest(callback) {
     let writesCounter = 0;
     let anchoringCounter = 0;
-    let did;
+    let keySSI;
 
-    function anchoringEventListener(err, hash) {
+    function anchoringEventListener(err) {
         assert.true(typeof err === 'undefined', 'No error while anchoring changes');
-        assert.true(typeof hash === 'string' && hash.length > 0, 'Hash is a non empty string');
-        assertFirst4FilesWereAnchored(did, () => {
+        assertFirst4FilesWereAnchored(keySSI, () => {
             if (++anchoringCounter !== 2) {
                 return;
             }
 
-            keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-                brickMapStrategy: brickMapStrategies.DIFF,
-            }, (err, dsu) => {
-                    assert.true(typeof err === 'undefined', "DSU has been anchored");
-                    assertFileWasAnchored(dsu, '/file5.txt', 'Lorem 5', () => {
-                        callback();
-                    })
+            resolver.loadDSU(keySSI, (err, dsu) => {
+                assert.true(typeof err === 'undefined', "DSU has been anchored");
+                assertFileWasAnchored(dsu, '/file5.txt', 'Lorem 5', () => {
+                    callback();
+                })
             });
         });
     }
 
     /**
-     * 
+     *
      * Anchor changes after 3 writes
-     * @param {BrickMap} sessionBrickMap 
-     * @param {callback} callback 
+     * @param {BrickMap} sessionBrickMap
+     * @param {callback} callback
      */
     function decisionFunction(sessionBrickMap, callback) {
         if (writesCounter++ < 3) {
@@ -59,31 +50,31 @@ function runTest(callback) {
         return callback(undefined, true);
     }
 
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint,
-        brickMapStrategy: brickMapStrategies.DIFF,
+    resolver.createDSU(keySSISpace.buildSeedSSI("default"), {
         anchoringOptions: {
             decisionFn: decisionFunction,
             anchoringEventListener: anchoringEventListener
         }
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
-        did = dsu.getDID();
+        dsu.getKeySSI((err, _keySSI) => {
+            keySSI = _keySSI;
 
-        assertFileWasWritten(dsu, '/file1.txt', 'Lorem 1', () => {
-            assertFileWasWritten(dsu, '/file2.txt', 'Lorem 2', () => {
-                assertFileWasWritten(dsu, '/file3.txt', 'Lorem 3', () => {
-                    assertChangesWereNotAnchored(did, () => {
-                        assertFileWasWritten(dsu, '/file4.txt', 'Lorem 4', () => {
-                            assertFileWasWritten(dsu, '/file5.txt', 'Lorem 5', () => {
-                                console.log('File was written to a new session');
+            assertFileWasWritten(dsu, '/file1.txt', 'Lorem 1', () => {
+                assertFileWasWritten(dsu, '/file2.txt', 'Lorem 2', () => {
+                    assertFileWasWritten(dsu, '/file3.txt', 'Lorem 3', () => {
+                        assertChangesWereNotAnchored(keySSI, () => {
+                            assertFileWasWritten(dsu, '/file4.txt', 'Lorem 4', () => {
+                                assertFileWasWritten(dsu, '/file5.txt', 'Lorem 5', () => {
+                                    console.log('File was written to a new session');
+                                })
                             })
                         })
                     })
                 })
-            })
+            });
+        })
 
-        });
     });
 }
 
@@ -100,19 +91,17 @@ function assertFileWasWritten(dsu, filename, data, callback) {
     })
 }
 
-function assertChangesWereNotAnchored(did, callback) {
-    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        brickMapStrategy: brickMapStrategies.DIFF,
-    }, (err, dsu) => {
-        assert.true(typeof err !== 'undefined', "DSU hasn't been anchored");
-        callback();
+function assertChangesWereNotAnchored(keySSI, callback) {
+    resolver.loadDSU(keySSI, (err, dsu) => {
+        dsu.readFile('/file3.txt', (err, data) => {
+            assert.true(typeof err !== 'undefined', "File wasn't written yet");
+            callback();
+        })
     });
 }
 
-function assertFirst4FilesWereAnchored(did, callback) {
-    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        brickMapStrategy: brickMapStrategies.DIFF,
-    }, (err, dsu) => {
+function assertFirst4FilesWereAnchored(keySSI, callback) {
+    resolver.loadDSU(keySSI, (err, dsu) => {
         assert.true(typeof err === 'undefined', "DSU has been anchored");
 
         assertFileWasAnchored(dsu, '/file1.txt', 'Lorem 1', () => {

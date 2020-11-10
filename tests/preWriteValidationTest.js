@@ -4,22 +4,20 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const dsuRepresentations = require('../lib/constants').builtinDSURepr;
+let resolver;
+let keySSISpace;
 
-let keyDidResolver;
-let favouriteEndpoint;
-
-testUtils.didResolverFactory({testFolder: 'prewrite_validation_test', testName: 'PreWrite Validation Test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'prewrite_validation_test', testName: 'PreWrite Validation Test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
+
     runTest(result.doneCallback);
 });
 
 function runTest(callback) {
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint,
-    }, (err, dsu) => {
+    resolver.createDSU(keySSISpace.buildSeedSSI('default'), (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
         const preWriteValidation = {

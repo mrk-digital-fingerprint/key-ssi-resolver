@@ -1,17 +1,12 @@
 const KeySSIResolver = require('./lib/KeySSIResolver');
-const constants = require('./lib/constants');
 const DSUFactory = require("./lib/DSUFactoryRegistry");
 const BootStrapingService = require("./lib/BootstrapingService");
 
 /**
- * Create a new KeyDIDResolver instance and append it to
+ * Create a new KeySSIResolver instance and append it to
  * global object $$
  *
  * @param {object} options
- * @param {object} options.endpointsConfiguration
- * @param {Array<object>} options.endpointsConfiguration.brick
- * @param {Array<object>} options.endpointsConfiguration.alias
- * @param {string} options.dlDomain
  */
 function initialize(options) {
     options = options || {};
@@ -35,7 +30,6 @@ function initialize(options) {
 
 module.exports = {
     initialize,
-    constants,
     KeySSIFactory: require('./lib/KeySSIs/KeySSIFactory'),
     CryptoAlgorithmsRegistry: require('./lib/KeySSIs/CryptoAlgorithmsRegistry'),
     SSITypes: require("./lib/KeySSIs/SSITypes"),

@@ -4,26 +4,22 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const dsuRepresentations = require('../lib/constants').builtinDSURepr;
+let resolver;
+let keySSISpace;
 
-let keyDidResolver;
-let favouriteEndpoint;
-
-testUtils.didResolverFactory({testFolder: 'load_bar_test_folder', testName: 'Load BAR Test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'load_dsu_test_folder', testName: 'Load DSU Test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
 
-    createBar((err, did) => {
+    createDSU((err, keySSI) => {
         assert.true(typeof err === 'undefined', 'DSU is writable');
-        runTest(did, result.doneCallback);
+        runTest(keySSI, result.doneCallback);
     });
 });
 
-function createBar(callback) {
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint
-    }, (err, dsu) => {
+function createDSU(callback) {
+    resolver.createDSU(keySSISpace.buildSeedSSI("default"), (err, dsu) => {
 
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
@@ -31,15 +27,17 @@ function createBar(callback) {
         dsu.createFolder('/created-folder', (err) => {
             dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
                 dsu.writeFile('/created-folder/my-second-file.txt', 'Iorem Lpsum', (err, hash) => {
-                    callback(err, dsu.getDID());
+                    dsu.getKeySSI((err, keySSI) => {
+                        callback(err, keySSI);
+                    })
                 })
             })
         })
     });
 }
 
-function runTest(did, callback) {
-    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, (err, dsu) => {
+function runTest(keySSI, callback) {
+    resolver.loadDSU(keySSI, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
         dsu.readFile('my-file.txt', (err, data) => {
@@ -55,5 +53,3 @@ function runTest(did, callback) {
         });
     });
 }
-
-

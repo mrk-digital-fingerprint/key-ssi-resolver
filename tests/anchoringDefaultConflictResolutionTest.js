@@ -3,12 +3,8 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const constants = require('../lib/constants');
-const dsuRepresentations = constants.builtinDSURepr;
-const brickMapStrategies = constants.builtinBrickMapStrategies;
-
-let keyDidResolver;
-let favouriteEndpoint;
+let resolver;
+let keySSISpace;
 
 const FILE_PATH = '/something/something/darkside/my-file.txt';
 const FILE_CONTENT =  'Lorem Ipsum';
@@ -16,19 +12,17 @@ const FILE_CONTENT =  'Lorem Ipsum';
 const SECOND_FILE_PATH = '/my-second-file.txt';
 const SECOND_FILE_CONTENT = 'Ipsum Lorem';
 
-testUtils.didResolverFactory({testFolder: 'anchoring_default_conflict_resolution_test', testName: 'Anchoring default conflict resolution test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'anchoring_default_conflict_resolution_test', testName: 'Anchoring default conflict resolution test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
 
     runTest(result.doneCallback);
 });
 
 function runTest(callback) {
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint,
-        brickMapStrategy: brickMapStrategies.DIFF
-    }, (err, dsu) => {
+    resolver.createDSU(keySSISpace.buildSeedSSI("default"), (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
         writeAndReadTest(dsu, callback);
@@ -43,15 +37,15 @@ function writeAndReadTest(dsu, callback) {
             assert.true(typeof err === 'undefined', 'DSU is readable');
             assert.true(data.toString() === FILE_CONTENT, 'File was read correctly');
 
-            loadSameDSU(dsu.getDID(), dsu, callback);
+            dsu.getKeySSI((err, keySSI) => {
+                loadSameDSU(keySSI, dsu, callback);
+            })
         })
     })
 }
 
-function loadSameDSU(did, oldDSU, callback) {
-    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        brickMapStrategy: brickMapStrategies.DIFF
-    }, (err, dsu) => {
+function loadSameDSU(keySSI, oldDSU, callback) {
+    resolver.loadDSU(keySSI, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
         dsu.writeFile(SECOND_FILE_PATH, SECOND_FILE_CONTENT, (err) => {
@@ -66,14 +60,14 @@ function writeFileInOldDSU(dsu, callback) {
     dsu.writeFile('/new-file.txt', 'Some data', (err) => {
         assert.true(typeof err === 'undefined', 'No error while writing file in the old DSU');
 
-        readFilesTest(dsu.getDID(), callback);
+        dsu.getKeySSI((err, keySSI) => {
+            readFilesTest(keySSI, callback);
+        })
     })
 }
 
-function readFilesTest(did, callback) {
-    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
-        brickMapStrategy: brickMapStrategies.DIFF
-    }, (err, dsu) => {
+function readFilesTest(keySSI, callback) {
+    resolver.loadDSU(keySSI, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while loading the DSU');
 
         dsu.readFile(FILE_PATH, (err, data) => {

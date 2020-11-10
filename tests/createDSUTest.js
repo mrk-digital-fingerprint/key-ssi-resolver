@@ -4,22 +4,18 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const dsuRepresentations = require('../lib/constants').builtinDSURepr;
+let resolver;
+let keySSISpace;
 
-let keyDidResolver;
-let favouriteEndpoint;
-
-testUtils.didResolverFactory({testFolder: 'create_bar_test_folder', testName: 'Create BAR test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'create_dsu_test_folder', testName: 'Create DSU test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
     runTest(result.doneCallback);
 });
 
 function runTest(callback) {
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint
-    }, (err, dsu) => {
+    resolver.createDSU(keySSISpace.buildSeedSSI("default"), (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');
 
@@ -45,12 +41,7 @@ function runTest(callback) {
                         })
                     })
                 })
-
-
             })
-
         });
     });
 }
-
-

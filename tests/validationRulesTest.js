@@ -3,25 +3,20 @@ const testUtils = require('./utils');
 const dc = require("double-check");
 const assert = dc.assert;
 
-const constants = require('../lib/constants');
-const dsuRepresentations = constants.builtinDSURepr;
-const brickMapStrategies = constants.builtinBrickMapStrategies;
+let resolver;
+let keySSISpace;
 
-let keyDidResolver;
-let favouriteEndpoint;
-
-testUtils.didResolverFactory({testFolder: 'validation_rules_test', testName: 'Validation Rules Test'}, (err, result) => {
+testUtils.resolverFactory({testFolder: 'validation_rules_test', testName: 'Validation Rules Test'}, (err, result) => {
     assert.true(err === null || typeof err === 'undefined', 'Failed to initialize test');
-    keyDidResolver = result.keyDidResolver;
-    favouriteEndpoint = result.favouriteEndpoint
+
+    resolver = result.resolver;
+    keySSISpace = result.keySSISpace;
 
     runTest(result.doneCallback);
 });
 
 function runTest(callback) {
-
-    keyDidResolver.createDSU(dsuRepresentations.BAR, {
-        favouriteEndpoint,
+    resolver.createDSU(keySSISpace.buildSeedSSI("default"), {
         validationRules: {
             preWrite: {
                 /**
@@ -43,14 +38,16 @@ function runTest(callback) {
 
         dsu.writeFile('/test', 'file content', (err) => {
             assert.true(typeof err === 'undefined', 'DSU is writable');
+            dsu.getKeySSI((err, keySSI) => {
+                loadDSU(keySSI, callback);
+            })
 
-            loadDSU(dsu.getDID(), callback);
         });
     });
 }
 
-function loadDSU(did, callback) {
-    keyDidResolver.loadDSU(did, dsuRepresentations.BAR, {
+function loadDSU(keySSI, callback) {
+    resolver.loadDSU(keySSI, {
         validationRules: {
             brickMapHistory: {
                 /**
@@ -58,7 +55,6 @@ function loadDSU(did, callback) {
                  * @param {callback} callback
                  */
                 validate: (brickMapDiffs, callback) => {
-                    console.log('BrickMap History', brickMapDiffs);
                     // Assume history is invalid
                     return callback(new Error('BrickMap history is invalid'));
                 }

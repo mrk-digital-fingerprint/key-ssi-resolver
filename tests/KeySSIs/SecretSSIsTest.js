@@ -12,7 +12,7 @@ assert.callback("KeySSIs test", (callback) => {
         if (err) {
             throw err;
         }
-        assert.true(publicSSI.getName() === SSITypes.PUBLIC_SSI);
+        assert.true(publicSSI.getTypeName() === SSITypes.PUBLIC_SSI);
         callback();
     });
 }, 2000);

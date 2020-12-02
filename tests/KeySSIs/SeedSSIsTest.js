@@ -11,7 +11,7 @@ assert.callback("SeedSSIs test", (callback) => {
             if (err) {
                 throw err;
             }
-            assert.true(sZaSSI.getName() === SSITypes.SZERO_ACCESS_SSI);
+            assert.true(sZaSSI.getTypeName() === SSITypes.SZERO_ACCESS_SSI);
             callback();
         });
     });

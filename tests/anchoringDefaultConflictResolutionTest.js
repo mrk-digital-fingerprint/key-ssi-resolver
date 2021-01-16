@@ -37,7 +37,7 @@ function writeAndReadTest(dsu, callback) {
             assert.true(typeof err === 'undefined', 'DSU is readable');
             assert.true(data.toString() === FILE_CONTENT, 'File was read correctly');
 
-            dsu.getKeySSI((err, keySSI) => {
+            dsu.getKeySSIAsString((err, keySSI) => {
                 loadSameDSU(keySSI, dsu, callback);
             })
         })
@@ -60,7 +60,7 @@ function writeFileInOldDSU(dsu, callback) {
     dsu.writeFile('/new-file.txt', 'Some data', (err) => {
         assert.true(typeof err === 'undefined', 'No error while writing file in the old DSU');
 
-        dsu.getKeySSI((err, keySSI) => {
+        dsu.getKeySSIAsString((err, keySSI) => {
             readFilesTest(keySSI, callback);
         })
     })

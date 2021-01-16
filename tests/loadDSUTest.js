@@ -27,7 +27,7 @@ function createDSU(callback) {
         dsu.createFolder('/created-folder', (err) => {
             dsu.writeFile('my-file.txt', 'Lorem Ipsum', (err, hash) => {
                 dsu.writeFile('/created-folder/my-second-file.txt', 'Iorem Lpsum', (err, hash) => {
-                    dsu.getKeySSI((err, keySSI) => {
+                    dsu.getKeySSIAsString((err, keySSI) => {
                         callback(err, keySSI);
                     })
                 })

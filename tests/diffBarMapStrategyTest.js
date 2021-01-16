@@ -33,7 +33,7 @@ function writeAndReadTest(dsu, callback) {
             assert.true(typeof err === 'undefined', 'DSU is readable');
             assert.true(data.toString() === FILE_CONTENT, 'File was read correctly');
 
-            dsu.getKeySSI((err, keySSI) => {
+            dsu.getKeySSIAsString((err, keySSI) => {
                 loadTest(keySSI, callback);
             })
         })
@@ -60,7 +60,7 @@ function deleteTest(dsu, callback) {
         dsu.readFile(FILE_PATH, (err, data) => {
             assert.true(typeof err !== 'undefined', 'File still exists');
 
-            dsu.getKeySSI((err, keySSI) => {
+            dsu.getKeySSIAsString((err, keySSI) => {
                 renameTest(keySSI, callback);
             })
         })
@@ -77,7 +77,7 @@ function renameTest(keySSI, callback) {
             dsu.rename(FILE_PATH, '/my-file.txt', (err) => {
                 assert.true(typeof err === 'undefined', 'No error while renaming file in DSU');
 
-                dsu.getKeySSI((err, keySSI) => {
+                dsu.getKeySSIAsString((err, keySSI) => {
                     renameTestAfterLoad(keySSI, callback);
                 })
             })

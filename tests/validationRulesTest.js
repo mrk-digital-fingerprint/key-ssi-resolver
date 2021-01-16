@@ -38,7 +38,7 @@ function runTest(callback) {
 
         dsu.writeFile('/test', 'file content', (err) => {
             assert.true(typeof err === 'undefined', 'DSU is writable');
-            dsu.getKeySSI((err, keySSI) => {
+            dsu.getKeySSIAsString((err, keySSI) => {
                 loadDSU(keySSI, callback);
             })
 

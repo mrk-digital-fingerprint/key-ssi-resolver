@@ -57,7 +57,7 @@ function runTest(callback) {
         }
     }, (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
-        dsu.getKeySSI((err, _keySSI) => {
+        dsu.getKeySSIAsString((err, _keySSI) => {
             keySSI = _keySSI;
 
             assertFileWasWritten(dsu, '/file1.txt', 'Lorem 1', () => {

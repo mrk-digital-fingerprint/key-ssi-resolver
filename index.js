@@ -1,7 +1,6 @@
 const KeySSIResolver = require('./lib/KeySSIResolver');
 const DSUFactory = require("./lib/DSUFactoryRegistry");
 const BootStrapingService = require("./lib/BootstrapingService");
-const KEYSSI_CONSTS = require('./lib/KeySSIs/constants')
 
 /**
  * Create a new KeySSIResolver instance and append it to
@@ -34,6 +33,5 @@ module.exports = {
     KeySSIFactory: require('./lib/KeySSIs/KeySSIFactory'),
     CryptoAlgorithmsRegistry: require('./lib/KeySSIs/CryptoAlgorithmsRegistry'),
     SSITypes: require("./lib/KeySSIs/SSITypes"),
-    DSUFactory: require("./lib/DSUFactoryRegistry"),
-    KEYSSI_CONSTS
+    DSUFactory: require("./lib/DSUFactoryRegistry")
 };

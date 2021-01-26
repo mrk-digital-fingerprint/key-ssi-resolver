@@ -1,6 +1,5 @@
 require("../../../../../psknode/bundles/testsRuntime");
 const assert = require("double-check").assert;
-const CryptoAlgorithmsRegistry = require("../../../lib/KeySSIs/CryptoAlgorithmsRegistry");
 
 const SSITypes = require("../../../lib/KeySSIs/SSITypes.js");
 const RootSSI = require("../../../lib/KeySSIs/TreeSSIs/RootSSI");
@@ -8,11 +7,11 @@ const RootSSI = require("../../../lib/KeySSIs/TreeSSIs/RootSSI");
 const defaultDomain = "domain"
 const defaultVersion = "v0"
 
-assert.callback("RootSSI successfull NodeSSI derivation", (callback) => {
+assert.callback("RootSSI successful NodeSSI derivation", (callback) => {
   const rootSSI = RootSSI.createRootSSI();
   rootSSI.initialize(defaultDomain)
 
-  
+
   const childNode = rootSSI.deriveChild()
 
   // current child count
@@ -53,6 +52,7 @@ assert.callback("Multiple NodeSSI derivation is deterministic", (callback) => {
   const childB0 = rootB.deriveChild()
   const childB1 = rootB.deriveChild()
 
+  assert.true(childA0.getSpecificString() != childA1.getSpecificString())
   assert.equal(rootA.getChildCount(), rootB.getChildCount())
   assert.equal(childA0.getIdentifier(true), childB0.getIdentifier(true))
   assert.equal(childA1.getIdentifier(true), childB1.getIdentifier(true))

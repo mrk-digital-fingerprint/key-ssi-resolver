@@ -59,7 +59,6 @@ assert.callback("RootSSI sucessfull load - all attributes valid", (callback) => 
   assert.true(rootSSI.getVn() === defaultVersion);
 
   // hint
-  console.log('rootSSI.getChainCode()', rootSSI.getChainCode())
   assert.true(rootSSI.isHintValid() === true);
   assert.true(typeof rootSSI.getChainCode() === 'string');
   assert.true(rootSSI.getChainCode().length > 1);

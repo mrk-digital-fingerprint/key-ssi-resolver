@@ -14,7 +14,7 @@ assert.callback("RootSSI successful signature and verification", (callback) => {
 
   const signature = rootSSI.sign(defaultData)
   const verify = leafSSI.verify(defaultData, signature)
-  assert.true(verify === true)
+  assert.true(verify)
 
   callback()
 });
@@ -28,7 +28,27 @@ assert.callback("NodeSSI successful signature and verification", (callback) => {
 
   const signature = nodeSSI.sign(defaultData)
   const verify = leafSSI.verify(defaultData, signature)
-  assert.true(verify === true)
+  assert.true(verify)
 
+  callback()
+});
+
+assert.callback("LeafSSI revocation resulting in failed future verification for new signatures", (callback) => {
+  const rootSSI = RootSSI.createRootSSI();
+  rootSSI.initialize(defaultDomain);
+  const nodeSSI = rootSSI.deriveChild()
+
+  const leafSSI = nodeSSI.derive()
+
+  const validOldSignature = nodeSSI.sign(defaultData)
+  const verifyOldSignature = leafSSI.verify(defaultData, validOldSignature)
+  assert.true(verifyOldSignature)
+
+  const newLeafSSI = nodeSSI.derive(Date.now())
+  const invalidNewSignature = nodeSSI.sign(defaultData)
+  const verifyNewSignature = newLeafSSI.verify(defaultData, invalidNewSignature)
+  assert.false(verifyNewSignature)
+
+  assert.true(verifyOldSignature)
   callback()
 });

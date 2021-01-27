@@ -17,7 +17,7 @@ testUtils.resolverFactory({testFolder: 'prewrite_validation_test', testName: 'Pr
 });
 
 function runTest(callback) {
-    resolver.createDSU(keySSISpace.buildSeedSSI('default'), (err, dsu) => {
+    resolver.createDSU(keySSISpace.buildTemplateSeedSSI('default'), (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
         const preWriteValidation = {

@@ -16,7 +16,7 @@ testUtils.resolverFactory({testFolder: 'anchoring_options_test', testName: 'Anch
 
 function runTest(callback) {
 
-    resolver.createDSU(keySSISpace.buildSeedSSI("default"), {
+    resolver.createDSU(keySSISpace.buildTemplateSeedSSI("default"), {
         anchoringOptions: {
             /**
              * @param {BrickMap} sessionBrickMap A dirty copy of the current valid BrickMap containing all changes (valid & un-anchored)

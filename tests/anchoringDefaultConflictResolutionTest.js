@@ -22,7 +22,7 @@ testUtils.resolverFactory({testFolder: 'anchoring_default_conflict_resolution_te
 });
 
 function runTest(callback) {
-    resolver.createDSU(keySSISpace.buildSeedSSI("default"), (err, dsu) => {
+    resolver.createDSU(keySSISpace.buildTemplateSeedSSI("default"), (err, dsu) => {
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
 
         writeAndReadTest(dsu, callback);

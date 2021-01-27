@@ -16,7 +16,7 @@ testUtils.resolverFactory({testFolder: 'validation_rules_test', testName: 'Valid
 });
 
 function runTest(callback) {
-    resolver.createDSU(keySSISpace.buildSeedSSI("default"), {
+    resolver.createDSU(keySSISpace.buildTemplateSeedSSI("default"), {
         validationRules: {
             preWrite: {
                 /**

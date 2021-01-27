@@ -50,7 +50,7 @@ function runTest(callback) {
         return callback(undefined, true);
     }
 
-    resolver.createDSU(keySSISpace.buildSeedSSI("default"), {
+    resolver.createDSU(keySSISpace.buildTemplateSeedSSI("default"), {
         anchoringOptions: {
             decisionFn: decisionFunction,
             anchoringEventListener: anchoringEventListener

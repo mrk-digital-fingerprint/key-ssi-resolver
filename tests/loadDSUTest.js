@@ -19,7 +19,7 @@ testUtils.resolverFactory({testFolder: 'load_dsu_test_folder', testName: 'Load D
 });
 
 function createDSU(callback) {
-    resolver.createDSU(keySSISpace.buildSeedSSI("default"), (err, dsu) => {
+    resolver.createDSU(keySSISpace.buildTemplateSeedSSI("default"), (err, dsu) => {
 
         assert.true(typeof err === 'undefined', 'No error while creating the DSU');
         assert.true(dsu.constructor.name === 'Archive', 'DSU has the correct class');

@@ -34,8 +34,7 @@ assert.callback("RootSSI successful NodeSSI derivation", (callback) => {
 
   // hint
   assert.true(childNode.isHintValid() === true);
-  assert.true(typeof childNode.getChainCode() === 'string');
-  assert.true(childNode.getChainCode().length > 1);
+  assert.true(typeof childNode.getChainCode() === 'object');
   assert.true(childNode.getNodePosition() === '0-1');
 
   callback()
@@ -79,7 +78,7 @@ assert.callback("Multiple Nested NodeSSI derivation is deterministic", (callback
   callback()
 });
 
-
-// assert.callback("Generate deterministically NodeSSI at position '0-1-3'", (callback) => {
-
-// });
+//
+// // assert.callback("Generate deterministically NodeSSI at position '0-1-3'", (callback) => {
+//
+// // });

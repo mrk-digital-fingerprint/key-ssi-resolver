@@ -10,8 +10,8 @@ const defaultSpecificString = "ApfxJHDRehBAc1qpCZdx5JnwCyLdbRcLQj5u1u6Z31s5"
 const defautHint = '{"chainCode":"abc","nodePosition":"0"}'
 
 assert.callback("RootSSI successfull initialization - all attributes valid", (callback) => {
-  const rootSSI = RootSSI.createRootSSI();
-  rootSSI.initialize(defaultDomain, (err, rSSI) => {
+    const rootSSI = RootSSI.createRootSSI();
+    rootSSI.initialize(defaultDomain, (err, rSSI) => {
       if (err) {
           throw err;
       }
@@ -20,28 +20,27 @@ assert.callback("RootSSI successfull initialization - all attributes valid", (ca
 
       // domain
       assert.true(rSSI.getDLDomain() === defaultDomain);
-
-      // specific string
+      //
+      // // specific string
       assert.true(typeof rSSI.getSpecificString() === 'string');
       assert.true(rSSI.getSpecificString().length === 44);
-      // control string
+      // // control string
       assert.true(!!rSSI.getControlString() === false);
-
-      // version
+      //
+      // // version
       assert.true(rSSI.getVn() === defaultVersion);
-
-      // hint
+      //
+      // // hint
       assert.true(rSSI.isHintValid() === true);
-      assert.true(typeof rSSI.getChainCode() === 'string');
-      assert.true(rSSI.getChainCode().length > 1);
+      assert.true(typeof rSSI.getChainCode() === 'object');
       assert.true(rSSI.getNodePosition() === '0');
   
       callback();
-  })
+    })
 });
 
 
-assert.callback("RootSSI sucessfull load - all attributes valid", (callback) => {
+assert.callback("RootSSI successful load - all attributes valid", (callback) => {
   const id = `ssi:${SSITypes.ROOT_SSI}:${defaultDomain}:${defaultSpecificString}::${defaultVersion}:${defautHint}`
   const rootSSI = RootSSI.createRootSSI(id);
   // type
@@ -60,8 +59,8 @@ assert.callback("RootSSI sucessfull load - all attributes valid", (callback) => 
 
   // hint
   assert.true(rootSSI.isHintValid() === true);
-  assert.true(typeof rootSSI.getChainCode() === 'string');
-  assert.true(rootSSI.getChainCode().length > 1);
+  assert.true(typeof rootSSI.getChainCode() === 'object');
+  assert.true(typeof rootSSI.getChainCode() === 'object');
   assert.true(rootSSI.getNodePosition() === '0');
 
   callback();
@@ -69,17 +68,24 @@ assert.callback("RootSSI sucessfull load - all attributes valid", (callback) => 
 
 assert.callback("RootSSI invalid load - no hint", (callback) => {
   const id = `ssi:${SSITypes.ROOT_SSI}:${defaultDomain}:${defaultSpecificString}::${defaultVersion}`
-  const rootSSI = RootSSI.createRootSSI(id);
-  assert.true(rootSSI.isHintValid() === false);
-
-  callback()
+  let rootSSI
+  try {
+    rootSSI = RootSSI.createRootSSI(id);
+  }
+  catch (error) {
+    assert.true(rootSSI === undefined);
+    callback()
+  }
 });
 
 assert.callback("RootSSI invalid load - hint invalid", (callback) => {
   const id = `ssi:${SSITypes.ROOT_SSI}:${defaultDomain}:${defaultSpecificString}::{"chainCode":undefined,"nodePosition":"0"}`
-  const rootSSI = RootSSI.createRootSSI(id);
-  assert.true(rootSSI.getChainCode() === undefined);
-  assert.true(rootSSI.isHintValid() === false);
-  
-  callback()
+  let rootSSI
+  try {
+    rootSSI = RootSSI.createRootSSI(id);
+  }
+  catch (error) {
+    assert.true(rootSSI === undefined);
+    callback()
+  }
 });

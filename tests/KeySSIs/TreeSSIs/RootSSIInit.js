@@ -79,7 +79,7 @@ assert.callback("RootSSI invalid load - no hint", (callback) => {
 });
 
 assert.callback("RootSSI invalid load - hint invalid", (callback) => {
-  const id = `ssi:${SSITypes.ROOT_SSI}:${defaultDomain}:${defaultSpecificString}::{"chainCode":undefined,"nodePosition":"0"}`
+  const id = `ssi:${SSITypes.ROOT_SSI}:${defaultDomain}:${defaultSpecificString}::{"chainCode":undefined,"nodePosition":undefined}`
   let rootSSI
   try {
     rootSSI = RootSSI.createRootSSI(id);

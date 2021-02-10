@@ -1,7 +1,7 @@
 require("../../../../../psknode/bundles/testsRuntime");
 const assert = require("double-check").assert;
 
-const RootSSI = require("../../../lib/KeySSIs/TreeSSIs/RootSSI");
+const RootSSI = require("../../../lib/KeySSIs/SeedSSIsV1/RootSSI");
 
 const defaultDomain = "domain"
 const defaultData = "Hello world."

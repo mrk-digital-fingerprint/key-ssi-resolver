@@ -3,7 +3,7 @@ const crypto = require('crypto');
 require("../../../../../psknode/bundles/testsRuntime");
 const assert = require("double-check").assert;
 const pskCrypto = require('../../../../pskcrypto')
-const {createRootSSI} = require("../../../lib/KeySSIs/TreeSSIs/RootSSI");
+const {createRootSSI} = require("../../../lib/KeySSIs/SeedSSIsV1/RootSSI");
 
 
 
